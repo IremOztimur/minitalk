@@ -46,7 +46,13 @@ RM = rm -rf
 AR = ar -rcs
 
 
-all: ${NAME}
+all: ${NAME} server client
+
+server: ${NAME} server.c
+	@${CC} ${CFLAGS} -o server server.c ${NAME}
+
+client: ${NAME} client.c
+	@${CC} ${CFLAGS} -o client client.c ${NAME}
 
 ${NAME}: ${OBJS}
 	@${AR} ${NAME} ${OBJS}
