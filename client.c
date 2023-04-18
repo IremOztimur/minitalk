@@ -6,7 +6,7 @@
 /*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 06:32:37 by ioztimur          #+#    #+#             */
-/*   Updated: 2023/04/18 15:57:39 by ioztimur         ###   ########.fr       */
+/*   Updated: 2023/04/18 19:40:47 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int	main(int argc, char **av)
 	sa.sa_sigaction = ft_recieved;
 	if ((sigaction(SIGUSR1, &sa, NULL) == -1))
 		ft_printf("Error sigaction\n");
-	server_pid = ft_atoi(av[1]);
 	if (argc != 3)
 	{
 		ft_printf("NOOOOOO");
 		return (0);
 	}
+	server_pid = ft_atoi(av[1]);
 	ft_send_text(server_pid, av[2]);
 }
