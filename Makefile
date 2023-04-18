@@ -69,8 +69,8 @@ clean:
 	@${RM} ${OBJS}
 
 fclean: clean
-	@${RM} ${NAME}
+	@${RM} ${NAME} server client
 
 re: fclean all
 
-.PHONY: fclean clean all
+.PHONY: fclean clean all re .c.o

@@ -6,32 +6,34 @@
 /*   By: ioztimur <ioztimur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 04:33:23 by ioztimur          #+#    #+#             */
-/*   Updated: 2023/04/16 06:21:27 by ioztimur         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:23:07 by ioztimur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-void	handler(int	sig, siginfo_t* info, void* context)
+int	ft_output(int output)
 {
-	(void)context;
-	(void)info;
+	write(1, &output, 1);
+	return (0);
+}
+
+void	handler(int sig, siginfo_t *info, void *context)
+{
 	static int	output;
 	static int	pid_client;
 	static int	i;
 
-	if (sig == SIGUSR1 && i < 32)
-		pid_client = pid_client | (1 << i);
-	else if (sig == SIGUSR1 && i < 40)
+	if (pid_client == 0)
+		pid_client = info->si_pid;
+	(void)context;
+	if (sig == SIGUSR1 && i < 8)
 		output = output | (1 << i);
 	i++;
-	if (i == 40)
+	if (i == 8)
 	{
 		if (output != 0)
-		{
-			write(1, &output, 1);
-			i = 32;
-		}
+			i = ft_output(output);
 		else
 		{
 			kill(pid_client, SIGUSR1);
@@ -42,17 +44,17 @@ void	handler(int	sig, siginfo_t* info, void* context)
 	}
 }
 
-int	main()
+int	main(void)
 {
 	struct sigaction	sa;
 
-	ft_printf("Server started!\nPID: %d", getpid());
+	ft_printf("Server started!\nPID: %d\n", getpid());
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART | SA_SIGINFO;
 	sa.sa_sigaction = handler;
 	if ((sigaction(SIGUSR1, &sa, NULL) == -1))
 		ft_printf("Error sigaction\n");
-	if ((sigaction(SIGUSR1, &sa, NULL) == -1))
+	if ((sigaction(SIGUSR2, &sa, NULL) == -1))
 		ft_printf("Error sigaction\n");
 	while (1)
 		pause();
